@@ -25,5 +25,20 @@ command_exists() {
   type "$command" >/dev/null 2>&1
 }
 
+# because bash does not support math with floating-point numbers
+# so awk does
+calc() {
+  local stdin;
+  read -d '' -u 0 stdin;
+  awk "BEGIN { print $stdin }";
+}
 
+# interpolate placeholder in template with value, applying printf formatting
+interpolate(){
+  local template="$1"
+  local placeholder="$2"
+  local value="$(printf "$3" "$4")"
+  
+  echo "${template//$placeholder/$value}"
+}
 

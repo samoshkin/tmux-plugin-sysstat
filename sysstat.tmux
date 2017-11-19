@@ -4,10 +4,10 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/scripts/helpers.sh"
 
 placeholders=(
-  "\#{cpu_percentage}"
-  "\#{mem}"
-  "\#{mem_percentage}"
-  "\#{loadavg}"
+  "\#{sysstat_cpu_percentage}"
+  "\#{sysstat_mem}"
+  "\#{sysstat_mem_percentage}"
+  "\#{sysstat_loadavg}"
 )
 
 commands=(

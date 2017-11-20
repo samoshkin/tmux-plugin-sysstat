@@ -11,9 +11,9 @@ get_tmux_option() {
 }
 
 set_tmux_option() {
-	local option="$1"
-	local value="$2"
-	tmux set-option -gq "$option" "$value"
+  local option="$1"
+  local value="$2"
+  tmux set-option -gq "$option" "$value"
 }
 
 is_osx() {
@@ -25,20 +25,16 @@ command_exists() {
   type "$command" >/dev/null 2>&1
 }
 
-# because bash does not support math with floating-point numbers
-# so awk does
+# because bash does not support floating-point math
+# but awk does
 calc() {
   local stdin;
   read -d '' -u 0 stdin;
   awk "BEGIN { print $stdin }";
 }
 
-# interpolate placeholder in template with value, applying printf formatting
-interpolate(){
-  local template="$1"
-  local placeholder="$2"
-  local value="$(printf "$3" "$4")"
-  
-  echo "${template//$placeholder/$value}"
+# "<" math operator which works with floats, once again based on awk
+fcomp() {
+  awk -v n1="$1" -v n2="$2" 'BEGIN {if (n1<n2) exit 0; exit 1}'
 }
 

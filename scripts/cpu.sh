@@ -52,9 +52,11 @@ print_cpu_usage() {
   
   local cpu_view="$cpu_view_tmpl"
   cpu_view="${cpu_view//'#{cpu.pused}'/$(printf "%.1f%%" "$cpu_pused")}"
-  cpu_view="${cpu_view//'#{cpu.color}'/$cpu_color}"
+  cpu_view="${cpu_view//'#{cpu.color}'/$(echo "$cpu_color" | awk '{ print $1 }')}"
+  cpu_view="${cpu_view//'#{cpu.color2}'/$(echo "$cpu_color" | awk '{ print $2 }')}"
+  cpu_view="${cpu_view//'#{cpu.color3}'/$(echo "$cpu_color" | awk '{ print $3 }')}"
 
-  echo $cpu_view
+  echo "$cpu_view"
 }
 
 main(){

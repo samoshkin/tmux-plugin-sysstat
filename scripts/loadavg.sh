@@ -3,14 +3,13 @@
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
+loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
+
 get_num_of_cores(){
   is_osx && sysctl -n hw.ncpu || nproc
 }
 
-main(){
-  echo "$(date)" >> ~/.tmux/sysstat_loadavg.log
-
-  local loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
+main(){ 
   local num_cores=$([ "$loadavg_per_cpu_core" == "true" ]  && get_num_of_cores || echo 1)
 
   uptime | awk -v num_cores="$num_cores" '{ 

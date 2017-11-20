@@ -8,6 +8,8 @@ get_num_of_cores(){
 }
 
 main(){
+  echo "$(date)" >> ~/.tmux/sysstat_loadavg.log
+
   local loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
   local num_cores=$([ "$loadavg_per_cpu_core" == "true" ]  && get_num_of_cores || echo 1)
 

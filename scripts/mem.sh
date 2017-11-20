@@ -105,6 +105,8 @@ get_mem_usage_osx(){
 }
 
 main() {
+  echo "$(date)" >> ~/.tmux/sysstat_mem.log
+
   if [ $print_swap -eq 1 ]; then print_swap;
   else print_mem; fi
 }

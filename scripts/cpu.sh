@@ -25,6 +25,7 @@ print_cpu_usage() {
 }
 
 main(){
+  echo "$(date)" >> ~/.tmux/sysstat_cpu.log
   print_cpu_usage
 }
 

@@ -8,7 +8,7 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-mem_view_tmpl=$(get_tmux_option "@sysstat_mem_view_tmpl" '#[fg=#{mem.color}]#{mem.pused}#[default]')
+mem_view_tmpl=$(get_tmux_option "@sysstat_mem_view_tmpl" '#[fg=#{mem.color2}]#{mem.pused}#[default]')
 
 mem_stress_threshold=$(get_tmux_option "@sysstat_mem_stress_threshold" "80")
 swap_stress_threshold=$(get_tmux_option "@sysstat_swap_stress_threshold" "80")
@@ -71,15 +71,19 @@ print_mem() {
   mem_view="${mem_view//'#{mem.pused}'/$(printf "%.0f%%" "$mem_pused")}"
   mem_view="${mem_view//'#{mem.free}'/$(printf "%.0fM" "$mem_free")}"
   mem_view="${mem_view//'#{mem.pfree}'/$(printf "%.0f%%" "$mem_pfree")}"
-  mem_view="${mem_view//'#{mem.total}'/$(printf "%.0fM" "$mem_total")}"
-  mem_view="${mem_view//'#{mem.color}'/$mem_color}"
+  mem_view="${mem_view//'#{mem.total}'/$(printf "%.0fM" "$mem_total")}"  
+  mem_view="${mem_view//'#{mem.color}'/$(echo "$mem_color" | awk '{ print $1 }')}"
+  mem_view="${mem_view//'#{mem.color2}'/$(echo "$mem_color" | awk '{ print $2 }')}"
+  mem_view="${mem_view//'#{mem.color3}'/$(echo "$mem_color" | awk '{ print $3 }')}"
   
   mem_view="${mem_view//'#{swap.used}'/$(printf "%.0fM" "$swap_used")}"
   mem_view="${mem_view//'#{swap.pused}'/$(printf "%.0f%%" "$swap_pused")}"
   mem_view="${mem_view//'#{swap.free}'/$(printf "%.0fM" "$swap_free")}"
   mem_view="${mem_view//'#{swap.pfree}'/$(printf "%.0f%%" "$swap_pfree")}"
   mem_view="${mem_view//'#{swap.total}'/$(printf "%.0fM" "$swap_total")}"
-  mem_view="${mem_view//'#{swap.color}'/$swap_color}"
+  mem_view="${mem_view//'#{swap.color}'/$(echo "$swap_color" | awk '{ print $1 }')}"
+  mem_view="${mem_view//'#{swap.color2}'/$(echo "$swap_color" | awk '{ print $2 }')}"
+  mem_view="${mem_view//'#{swap.color3}'/$(echo "$swap_color" | awk '{ print $3 }')}"
 
   echo "$mem_view"
 }
@@ -117,8 +121,6 @@ get_mem_usage_osx(){
 }
 
 main() {
-  # echo "$(date)" >> ~/.tmux/sysstat_mem.log
-
   print_mem
 }
 

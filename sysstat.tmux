@@ -4,7 +4,7 @@ CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/scripts/helpers.sh"
 
 placeholders=(
-  "\#{sysstat_cpu_percentage}"
+  "\#{sysstat_cpu}"
   "\#{sysstat_mem}"
   "\#{sysstat_swap}"
   "\#{sysstat_loadavg}"

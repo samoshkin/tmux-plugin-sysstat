@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO: add option to choose size unit: M|G
+
 set -u
 set -e
 

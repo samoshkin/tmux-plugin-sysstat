@@ -20,6 +20,11 @@ is_osx() {
   [ $(uname) == "Darwin" ]
 }
 
+is_linux(){
+  [ $(uname -s) == "Linux" ]
+}
+
+
 command_exists() {
   local command="$1"
   type "$command" >/dev/null 2>&1

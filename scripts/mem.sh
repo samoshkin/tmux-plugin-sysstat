@@ -44,10 +44,9 @@ print_mem() {
   local size_format
   
   if is_osx; then
+    mem_usage=$(get_mem_usage_linux)
+  elif is_linux; then 
     mem_usage=$(get_mem_usage_osx)
-  else 
-    #  TODO: implement memory calculation for linux
-    mem_usage="TODO"
   fi
 
   # get_mem_usage* function returns values in KiB
@@ -87,8 +86,6 @@ print_mem() {
   # Calculate colors for mem and swap
   local mem_color=$(get_mem_color "$mem_pused")
   local swap_color=$(get_swap_color "$swap_pused")
-
-  echo $mem_view_tmpl;
   
   local mem_view="$mem_view_tmpl"
   mem_view="${mem_view//'#{mem.used}'/$(printf "$size_format" "$mem_used" "$size_unit")}"
@@ -142,6 +139,37 @@ get_mem_usage_osx(){
   local swap_free=$(sysctl -nq vm.swapusage | awk -F '  ' '{ print $3 }' | awk -F '=' '{gsub(/^[ ]|[M]$/, "", $2); printf "%d", $2 * 1024 }')
 
   printf "%s %s %s" "$free_used" "$swap_free" "$swap_used"
+}
+
+
+# Method #1. Sum up free+buffers+cached, treat it as "available" memory, assuming buff+cache can be reclaimed. Note, that this assumption is not 100% correct, buff+cache most likely cannot be 100% reclaimed, but this is how memory calculation is used to be done on Linux
+
+# Method #2. If "MemAvailable" is provided by system, use it. This is more correct method, because we're not relying on fragile "free+buffer+cache" equation. 
+
+# See: Interpreting /proc/meminfo and free output for Red Hat Enterprise Linux 5, 6 and 7 - Red Hat Customer Portal - https://access.redhat.com/solutions/406773
+
+# See: kernel/git/torvalds/linux.git - /proc/meminfo: provide estimated available memory - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=34e431b0ae398fc54ea69ff85ec700722c9da773
+get_mem_usage_linux(){
+  local mem_free_used=$( </proc/meminfo awk '
+    BEGIN { total=0; free=0; }
+      /MemTotal:/ { total=$2; }
+      
+      /MemFree:/ { free+=$2; }
+      /Buffers:/ { free+=$2; }
+      /Cached:/ { free+=$2; }
+
+      /MemAvailable:/ { free=$2; exit;}
+    END { print free, total-free }
+  ')
+
+  local swap_free_used=$( </proc/meminfo awk '
+    BEGIN { total=0; free=0; }
+      /SwapTotal:/ { total=$2; }
+      /SwapFree:/ { free=$2; }
+    END { print free, total-free }
+  ')
+
+  printf "%s %s" "$mem_free_used" "$swap_free_used"
 }
 
 main() {

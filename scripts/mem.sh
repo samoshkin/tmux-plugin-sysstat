@@ -44,9 +44,9 @@ print_mem() {
   local size_format
   
   if is_osx; then
-    mem_usage=$(get_mem_usage_linux)
-  elif is_linux; then 
     mem_usage=$(get_mem_usage_osx)
+  elif is_linux; then 
+    mem_usage=$(get_mem_usage_linux)
   fi
 
   # get_mem_usage* function returns values in KiB

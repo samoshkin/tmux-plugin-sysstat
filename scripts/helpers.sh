@@ -43,3 +43,31 @@ fcomp() {
   awk -v n1="$1" -v n2="$2" 'BEGIN {if (n1<n2) exit 0; exit 1}'
 }
 
+# get_mem_usage* function returns values in KiB
+# 1 - scale to KiB
+# 1024 - scale to MiB
+# 1048576 - scale to GiB
+function get_size_scale_factor(){
+  local size_unit="$1"
+  case "$size_unit" in 
+    G) echo 1048576;;
+    M) echo 1024;;
+    K) echo 1;;
+  esac
+}
+
+# Depending on scale factor, change precision
+# 12612325K - no digits after floating point
+# 1261M - no digits after floating point
+# 1.1G  - 1 digit after floating point 
+function get_size_format(){
+  local size_unit="$1"
+  case "$size_unit" in 
+    G) echo '%.1f%s';;
+    M) echo '%.0f%s';;
+    K) echo '%.0f%s';;
+  esac
+}
+  
+  
+

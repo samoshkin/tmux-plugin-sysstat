@@ -6,6 +6,7 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
+# TODO: use less than 1 second
 refresh_interval=$(get_tmux_option "status-interval" "5")
 
 cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" '#[fg=#{cpu.color}]#{cpu.pused}#[default]')
@@ -30,6 +31,7 @@ get_cpu_color(){
 }
 
 get_cpu_usage() {
+  echo "87.2"; return
   if is_osx; then
     if command_exists "iostat"; then
       iostat -c 2 -w "$refresh_interval" | tail -n 1 | awk '{ print 100-$6 }'

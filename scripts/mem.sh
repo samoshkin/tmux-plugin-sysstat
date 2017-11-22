@@ -8,33 +8,43 @@ source "$CURRENT_DIR/helpers.sh"
 
 mem_view_tmpl=$(get_tmux_option "@sysstat_mem_view_tmpl" '#[fg=#{mem.color}]#{mem.pused}#[default]')
 
-mem_stress_threshold=$(get_tmux_option "@sysstat_mem_stress_threshold" "80")
-swap_stress_threshold=$(get_tmux_option "@sysstat_swap_stress_threshold" "80")
+mem_medium_threshold=$(get_tmux_option "@sysstat_mem_medium_threshold" "75")
+mem_stress_threshold=$(get_tmux_option "@sysstat_mem_stress_threshold" "90")
 
-mem_color_ok=$(get_tmux_option "@sysstat_mem_color_ok" "green")
-mem_color_stress=$(get_tmux_option "@sysstat_mem_color_stress" "yellow")
-swap_color_ok=$(get_tmux_option "@sysstat_swap_color_ok" "green")
-swap_color_stress=$(get_tmux_option "@sysstat_swap_color_stress" "yellow")
+swap_medium_threshold=$(get_tmux_option "@sysstat_swap_medium_threshold" "25")
+swap_stress_threshold=$(get_tmux_option "@sysstat_swap_stress_threshold" "75")
 
-size_unit=$(get_tmux_option "@sysstat_mem_size_unit" "M")
+mem_color_low=$(get_tmux_option "@sysstat_mem_color_low" "green")
+mem_color_medium=$(get_tmux_option "@sysstat_mem_color_medium" "yellow")
+mem_color_stress=$(get_tmux_option "@sysstat_mem_color_stress" "red")
+
+swap_color_low=$(get_tmux_option "@sysstat_swap_color_low" "green")
+swap_color_medium=$(get_tmux_option "@sysstat_swap_color_medium" "yellow")
+swap_color_stress=$(get_tmux_option "@sysstat_swap_color_stress" "red")
+
+size_unit=$(get_tmux_option "@sysstat_mem_size_unit" "G")
 
 get_mem_color() {
   local mem_pused=$1
 
   if fcomp "$mem_stress_threshold" "$mem_pused"; then
     echo "$mem_color_stress";
-  else 
-    echo "$mem_color_ok";
+  elif fcomp "$mem_medium_threshold" "$mem_pused"; then
+    echo "$mem_color_medium";
+  else
+    echo "$mem_color_low";
   fi
 }
 
-get_swap_color(){
+get_swap_color() {
   local swap_pused=$1
 
   if fcomp "$swap_stress_threshold" "$swap_pused"; then
     echo "$swap_color_stress";
-  else 
-    echo "$swap_color_ok";
+  elif fcomp "$swap_medium_threshold" "$swap_pused"; then
+    echo "$swap_color_medium";
+  else
+    echo "$swap_color_low";
   fi
 }
 

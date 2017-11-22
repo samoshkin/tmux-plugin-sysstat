@@ -11,17 +11,17 @@ refresh_interval=$(get_tmux_option "status-interval" "5")
 cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" '#[fg=#{cpu.color}]#{cpu.pused}#[default]')
 
 cpu_medium_threshold=$(get_tmux_option "@sysstat_cpu_medium_threshold" "30")
-cpu_high_threshold=$(get_tmux_option "@sysstat_cpu_high_threshold" "80")
+cpu_stress_threshold=$(get_tmux_option "@sysstat_cpu_stress_threshold" "80")
 
 cpu_color_low=$(get_tmux_option "@sysstat_cpu_color_low" "green")
 cpu_color_medium=$(get_tmux_option "@sysstat_cpu_color_medium" "yellow")
-cpu_color_high=$(get_tmux_option "@sysstat_cpu_color_high" "red")
+cpu_color_stress=$(get_tmux_option "@sysstat_cpu_color_stress" "red")
 
 get_cpu_color(){
   local cpu_used=$1
 
-  if fcomp "$cpu_high_threshold" "$cpu_used"; then
-    echo "$cpu_color_high";
+  if fcomp "$cpu_stress_threshold" "$cpu_used"; then
+    echo "$cpu_color_stress";
   elif fcomp "$cpu_medium_threshold" "$cpu_used"; then
     echo "$cpu_color_medium";
   else

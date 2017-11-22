@@ -6,8 +6,12 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-# TODO: use less than 1 second
 refresh_interval=$(get_tmux_option "status-interval" "5")
+
+# reduce interval by 1 second, so command has time to complete within tmux status refresh interval. Otherwise, tmux will use stale previous command result for 2 times in a row
+if [ "$refresh_interval" -gt "1" ]; then
+  refresh_interval="$(($refresh_interval - 1))"
+fi
 
 cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" 'CPU:#[fg=#{cpu.color}]#{cpu.pused}#[default]')
 
@@ -57,7 +61,7 @@ print_cpu_usage() {
   cpu_view="${cpu_view//'#{cpu.color2}'/$(echo "$cpu_color" | awk '{ print $2 }')}"
   cpu_view="${cpu_view//'#{cpu.color3}'/$(echo "$cpu_color" | awk '{ print $3 }')}"
 
-  echo "$(date +%M:%S)  $cpu_view"
+  echo "$cpu_view"
 }
 
 main(){

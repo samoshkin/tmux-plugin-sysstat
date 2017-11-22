@@ -3,7 +3,7 @@ Tmux sysstat plugin
 ===================
 Allow to print CPU usage, memory & swap, load average, net I/O metrics in Tmux status bar
 
-![intro](/screenshots/intro2.png)
+![intro](/screenshots/intro.png)
 
 You might checkout [tmux-config](https://github.com/samoshkin/tmux-config) repo to see this plugin in action.
 

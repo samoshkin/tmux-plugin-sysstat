@@ -31,7 +31,6 @@ get_cpu_color(){
 }
 
 get_cpu_usage() {
-  echo "87.2"; return
   if is_osx; then
     if command_exists "iostat"; then
       iostat -c 2 -w "$refresh_interval" | tail -n 1 | awk '{ print 100-$6 }'
@@ -58,7 +57,7 @@ print_cpu_usage() {
   cpu_view="${cpu_view//'#{cpu.color2}'/$(echo "$cpu_color" | awk '{ print $2 }')}"
   cpu_view="${cpu_view//'#{cpu.color3}'/$(echo "$cpu_color" | awk '{ print $3 }')}"
 
-  echo "$cpu_view"
+  echo "$(date +%M:%S)  $cpu_view"
 }
 
 main(){

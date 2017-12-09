@@ -45,9 +45,17 @@ get_cpu_usage() {
     fi
   else
     if command_exists "vmstat"; then
-      vmstat -n "$refresh_interval" 2 | tail -n 1 | awk '{print 100-$(NF-2)}'
+	if is_freebsd; then
+	    vmstat -n "$refresh_interval" -c 2 | tail -n 1 | awk '{print 100-$(NF-0)}'
+	else
+	    vmstat -n "$refresh_interval" 2 | tail -n 1 | awk '{print 100-$(NF-2)}'
+	fi
     else
-      top -b -n 2 -d "$refresh_interval" | sed -nr '/%Cpu/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)[[:space:]]*id.*/\1/p' | tail -n 1 | awk '{ print 100-$0 }'
+	if is_freebsd; then
+	    top -d2 | sed -nr '/CPU:/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*id.*/\1/p' | tail -n 1 | awk '{ print 100-$0 }'
+	else
+	    top -b -n 2 -d "$refresh_interval" | sed -nr '/%Cpu/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)[[:space:]]*id.*/\1/p' | tail -n 1 | awk '{ print 100-$0 }'
+	fi
     fi
   fi
 }

@@ -24,6 +24,9 @@ is_linux(){
   [ $(uname -s) == "Linux" ]
 }
 
+is_freebsd() {
+    [ $(uname) == FreeBSD ]
+}
 
 command_exists() {
   local command="$1"

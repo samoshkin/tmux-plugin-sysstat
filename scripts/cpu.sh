@@ -39,7 +39,7 @@ get_cpu_color(){
 get_cpu_usage() {
   if is_osx; then
     if command_exists "iostat"; then
-      iostat -c 2 -w "$refresh_interval" | tail -n 1 | awk '{ print 100-$6 }'
+      iostat -c 2 -w "$refresh_interval" | tail -n 1 | awk '{ print 100-$(NF-3) }'
     else
       top -l 2 -s "$refresh_interval" -n 0 | sed -nr '/CPU usage/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*idle.*/\1/p' | tail -n 1 | awk '{ print 100-$0 }'
     fi

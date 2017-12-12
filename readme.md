@@ -283,20 +283,6 @@ $ iostat -c 2 -w 5
 
 We align CPU calculation intervals (`-w`) with tmux status bar refresh interval (`status-interval` setting).
 
-### "cmd not ready" message
-
-When you run *tmux* for the first time, you might see following message instead of CPU metric for few seconds.
-
-> cmd ~/.tmux/plugins/sysstat/scripts/cpu.sh not ready
-
-This is because CPU calculation is long running command, which need to measures CPU average per second for specific time interval. It's not a one-shot command, like memory calculation, which just queries `vmstat` or `proc/meminfo` for current system state. If we did the same for CPU calculation, it would have just print CPU usage average since system bootstrap (not for last X seconds).
-
-Quote from `man tmux`:
-> When constructing formats, tmux does not wait for `#()' commands to finish; instead, the previous result from running the same command is used, or a placeholder if the command has not been run before.  If the command hasn't exited, the most recent line of output will be used, but the status line will not be updated more than once a second.
-
-Therefore, when you run `tmux` for the first time, there is no previous result, thus it prints `<'cmd' not ready>`. Next time status bar is refreshed, tmux will use previous command's output. This is expected behavior.
-
-
 Internals: memory calculation
 ----------------------------
 You might ask what we treat as `free` memory and how it's calculated.

@@ -26,10 +26,10 @@ get_cpu_usage() {
 	  SAR_STAT=`sar -u 1 1 |grep nice`
 	  if [[ "$SAR_STAT" == "" ]]; then
 		  sar -u "$refresh_interval" "$samples_count" \
-			| stdbuf -o0 awk '{print 100-$(9)}'
+			| stdbuf -o0 awk '{print 100-$(8)}'
 	  else
 		  sar -u "$refresh_interval" "$samples_count" \
-			| stdbuf -o0 awk '{print 100-$(8)}'
+			| stdbuf -o0 awk '{print 100-$(9)}'
 	  fi
   elif [ ! `command_exists "vmstat"` ]; then
     if is_freebsd; then

@@ -23,8 +23,14 @@ get_cpu_usage() {
         | stdbuf -o0 awk '{ print 100-$0 }'
     fi
   elif [ ! `command_exists "sar"` -a is_linux ]; then
-      sar -u "$refresh_interval" "$samples_count" \
-        | stdbuf -o0 awk 'NR>2 {print 100-$(8)}'
+	  SAR_STAT=`sar -u 1 1 |grep nice`
+	  if [[ "$SAR_STAT" == "" ]]; then
+		  sar -u "$refresh_interval" "$samples_count" \
+			| stdbuf -o0 awk '{print 100-$(9)}'
+	  else
+		  sar -u "$refresh_interval" "$samples_count" \
+			| stdbuf -o0 awk '{print 100-$(8)}'
+	  fi
   elif [ ! `command_exists "vmstat"` ]; then
     if is_freebsd; then
       vmstat -n "$refresh_interval" -c "$samples_count" \

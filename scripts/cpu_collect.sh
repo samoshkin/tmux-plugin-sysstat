@@ -34,7 +34,7 @@ get_cpu_usage() {
 			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(9)}'
 	  else
 		  sar -u "$refresh_interval" "$samples_count" \
-			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(3)}'
+			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(8)}'
 	  fi
   elif [ ! `command_exists "vmstat"` ]; then
     if is_freebsd; then

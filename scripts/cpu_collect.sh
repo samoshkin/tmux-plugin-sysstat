@@ -23,13 +23,18 @@ get_cpu_usage() {
         | stdbuf -o0 awk '{ print 100-$0 }'
     fi
   elif [ ! `command_exists "sar"` -a is_linux ]; then
-	  SAR_STAT=`sar -u 1 1|awk '{ print $8}'|grep idle`
-	  if [[ "$SAR_STAT" == "" ]]; then
+	  GET_IDLE_STAT=`sar -u 1 1|awk '{ print $9}'`
+	  case "$GET_IDLE_STAT" in
+		  *"idle"*) ret=0 ;;
+		      *) ret=1 ;;
+		  esac
+	  SAR_STAT=$ret
+	  if [[ $SAR_STAT == 0 ]]; then
 		  sar -u "$refresh_interval" "$samples_count" \
 			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(9)}'
 	  else
 		  sar -u "$refresh_interval" "$samples_count" \
-			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(8)}'
+			  |stdbuf -o0 grep all |stdbuf -o0 awk '{print 100-$(3)}'
 	  fi
   elif [ ! `command_exists "vmstat"` ]; then
     if is_freebsd; then
@@ -50,6 +55,7 @@ get_cpu_usage() {
         | stdbuf -o0 awk '{ print 100-$0 }'
     fi
   fi
+		  echo "FF"
 }
 
 main() {

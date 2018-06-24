@@ -8,19 +8,19 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-refresh_interval=$(get_tmux_option "status-interval" "5")
-samples_count="60"
+refresh_interval=$(get_tmux_option "status-interval" "5")/2
+samples_count="2"
 cpu_metric_file="$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")/cpu_collect.metric"
 
 get_cpu_usage() {
   if is_osx; then
     if command_exists "iostat"; then
       iostat -w "$refresh_interval" -c "$samples_count" \
-        | stdbuf -o0 awk 'NR > 2 { print 100-$(NF-3); }'
+        | gstdbuf -o0 awk 'NR > 2 { print 100-$(NF-3); }'
     else
       top -l "$samples_count" -s "$refresh_interval" -n 0 \
         | sed -u -nr '/CPU usage/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*idle.*/\1/p' \
-        | stdbuf -o0 awk '{ print 100-$0 }'
+        | gstdbuf -o0 awk '{ print 100-$0 }'
     fi
   elif ! command_exists "vmstat"; then
     if is_freebsd; then

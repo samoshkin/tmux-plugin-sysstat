@@ -7,6 +7,7 @@ LC_NUMERIC=C
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
+NULL="/dev/null"
 
 loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
 loadavg_color_low=$(get_tmux_option "@sysstat_cpu_color_low" "green")
@@ -18,7 +19,8 @@ loadavg_medium_threshold=$(get_tmux_option "@sysstat_cpu_medium_threshold" "0.8"
 loadavg_stress_threshold=$(get_tmux_option "@sysstat_cpu_stress_threshold" "1.0")
 
 get_num_of_cores(){
-  is_osx && sysctl -n hw.ncpu || nproc
+  is_osx && sysctl -n hw.ncpu || nproc 2> ${NULL}
+  is_freebsd && sysctl -n hw.ncpu || nproc 2> ${NULL}
 }
 
 get_loadavg_color(){
@@ -33,12 +35,12 @@ get_loadavg_color(){
   fi
 }
 
-main(){
+main() {
   local num_cores=$([ "$loadavg_per_cpu_core" == "true" ]  && get_num_of_cores || echo 1)
 
   # num_cores=1
 
-  UPTIME_INFO=`uptime`
+  UPTIME_INFO=`uptime 2>/${NULL}`
   UPTIME_INFO=${UPTIME_INFO##*load average:}
   load_15min=`echo ${UPTIME_INFO}|cut -f 1 -d ","`
   load_5min=`echo ${UPTIME_INFO}|cut -f 2 -d ","`

@@ -59,8 +59,20 @@ get_cpu_usage() {
 }
 
 main() {
+  i0=0
+  CURENT_PROCESS_INFO=`ps ux |grep cpu_collect.sh|grep -v grep|grep -v vim`
+	echo "new" >> ~/cpu.log
+  if [[ $CURENT_PROCESS_INFO == "" ]]; then
+  	exit
+  fi
   get_cpu_usage | while read -r value; do
+	TMUX_PROCESS_INFO=`ps ux|grep " tmux"|grep -v grep`
     echo "$value" | tee "$cpu_metric_file"
+	if [[ $TMUX_PROCESS_INFO == "" ]]; then
+		exit
+	fi
+	i0=$((i0+1))
+	echo "value $value loop $i0 $(date)" >> ~/cpu.log
   done
 }
 

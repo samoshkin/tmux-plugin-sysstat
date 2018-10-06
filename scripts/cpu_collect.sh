@@ -61,7 +61,6 @@ get_cpu_usage() {
 main() {
   i0=0
   CURENT_PROCESS_INFO=`ps ux |grep cpu_collect.sh|grep -v grep|grep -v vim`
-	echo "new" >> ~/cpu.log
   if [[ $CURENT_PROCESS_INFO == "" ]]; then
   	exit
   fi
@@ -72,7 +71,7 @@ main() {
 		exit
 	fi
 	i0=$((i0+1))
-	echo "value $value loop $i0 $(date)" >> ~/cpu.log
+	# echo "value $value loop $i0 $(date)" >> ~/cpu.log
   done
 }
 

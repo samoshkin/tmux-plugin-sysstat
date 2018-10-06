@@ -4,9 +4,9 @@ get_tmux_option() {
   local default_value="$2"
   local option_value="$(tmux show-option -gqv "$option")"
   if [ -z "$option_value" ]; then
-    echo "$default_value"
+	echo "$default_value"
   else
-    echo "$option_value"
+	echo "$option_value"
   fi
 }
 
@@ -16,6 +16,28 @@ set_tmux_option() {
   tmux set-option -gq "$option" "$value"
 }
 
+get_tmux_option_ex() {
+	local option=$1
+	local default_value=$2
+	local force_icon=$3
+	if [[ $force_icon == "force" ]]; then
+		local option_value=$(tmux show-option -gqv "$option")
+		if [[ $option_value != $default_value ]]; then
+			set_tmux_option "$option" "$default_value"
+		fi
+	fi
+	local option_value=$(tmux show-option -gqv "$option")
+	if [[ $force_icon == "custom" ]]; then
+		echo "$default_value"
+	elif [[ $force_icon == "force" ]]; then
+		echo "$option_value"
+	elif [[ $option_value != "" ]]; then
+		echo "$option_value"
+	else
+		echo "$default_value"
+		# echo "$option_value"
+	fi
+}
 is_osx() {
   [ $(uname) == "Darwin" ]
 }

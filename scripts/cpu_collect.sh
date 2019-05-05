@@ -22,7 +22,7 @@ get_cpu_usage() {
 		| sed -u -nr '/CPU usage/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*idle.*/\1/p' \
 		| stdbuf -o0 awk '{ print 100-$0 }'
 	fi
-	elif [ ! `command_exists "sar"` -a is_linux ]; then
+	elif [ `command_exists "sar"` -a is_linux ]; then
 		GET_IDLE_STAT=`sar -u 1 1|awk '{ print $9}'`
 		case "$GET_IDLE_STAT" in
 		  *"idle"*) ret=0 ;;

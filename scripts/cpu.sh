@@ -34,7 +34,7 @@ get_cpu_color(){
 print_cpu_usage() {
   local cpu_pused=$(get_cpu_usage_or_collect)
   local cpu_color=$(get_cpu_color "$cpu_pused")
-  
+
   local cpu_view="$cpu_view_tmpl"
   cpu_view="${cpu_view//'#{cpu.pused}'/$(printf "%.1f%%" "$cpu_pused")}"
   cpu_view="${cpu_view//'#{cpu.color}'/$(echo "$cpu_color" | awk '{ print $1 }')}"
@@ -60,7 +60,7 @@ start_cpu_collect_if_required() {
   if [ -f "$collect_cpu_pidfile" ] && ps -p "$(cat "$collect_cpu_pidfile")" > /dev/null 2>&1; then
     return;
   fi
-  
+
   jobs >/dev/null 2>&1
   "$CURRENT_DIR/cpu_collect.sh" &>/dev/null &
   if [ -n "$(jobs -n)" ]; then

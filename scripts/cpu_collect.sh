@@ -22,7 +22,7 @@ get_cpu_usage() {
         | sed -u -nr '/CPU usage/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*idle.*/\1/p' \
         | stdbuf -o0 awk '{ print 100-$0 }'
     fi
-  elif ! command_exists "vmstat"; then
+  elif command_exists "vmstat"; then
     if is_freebsd; then
       vmstat -n "$refresh_interval" -c "$samples_count" \
         | stdbuf -o0 awk 'NR>2 {print 100-$(NF-0)}'

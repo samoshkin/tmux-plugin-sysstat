@@ -59,9 +59,9 @@ print_mem() {
   
   local mem_view="$mem_view_tmpl"
   mem_view="${mem_view//'#{mem.used}'/$(printf "$size_format" "$mem_used" "$size_unit")}"
-  mem_view="${mem_view//'#{mem.pused}'/$(printf "%.0f%%" "$mem_pused")}"
+  mem_view="${mem_view//'#{mem.pused}'/$(printf "%2.0f%%" "$mem_pused")}"
   mem_view="${mem_view//'#{mem.free}'/$(printf "$size_format" "$mem_free" "$size_unit")}"
-  mem_view="${mem_view//'#{mem.pfree}'/$(printf "%.0f%%" "$mem_pfree")}"
+  mem_view="${mem_view//'#{mem.pfree}'/$(printf "%2.0f%%" "$mem_pfree")}"
   mem_view="${mem_view//'#{mem.total}'/$(printf "$size_format" "$mem_total" "$size_unit")}"  
   mem_view="${mem_view//'#{mem.color}'/$(echo "$mem_color" | awk '{ print $1 }')}"
   mem_view="${mem_view//'#{mem.color2}'/$(echo "$mem_color" | awk '{ print $2 }')}"

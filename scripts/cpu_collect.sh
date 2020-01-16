@@ -16,7 +16,7 @@ get_cpu_usage() {
   if is_osx; then
     if command_exists "iostat"; then
       iostat -w "$refresh_interval" -c "$samples_count" \
-        | stdbuf -o0 awk 'NR > 2 { print 100-$(NF-3); }'
+        | awk 'NR > 2 { print 100-$(NF-3); fflush(""); }'
     else
       top -l "$samples_count" -s "$refresh_interval" -n 0 \
         | sed -u -nr '/CPU usage/s/.*,[[:space:]]*([0-9]+[.,][0-9]*)%[[:space:]]*idle.*/\1/p' \

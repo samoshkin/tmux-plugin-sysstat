@@ -150,6 +150,16 @@ set -g @sysstat_mem_size_unit "G"
 
 If you choose `G` for size scale, output will have `%.1f` (1 digit after floating point), otherwise size is integer (4.5G, 1024M, 1232345K).
 
+### Change percentage format
+
+You can change default percentage format.
+
+```
+set -g @sysstat_cpu_pused_format '%2.0f%%'
+set -g @sysstat_mem_pused_format '%2.0f%%'
+set -g @sysstat_mem_pfree_format '%2.0f%%'
+```
+
 Thresholds and colored output
 ---------------
 Each metric output is colored by default. Colors vary depending on metric value.

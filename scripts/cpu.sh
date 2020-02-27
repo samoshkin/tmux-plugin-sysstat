@@ -11,6 +11,7 @@ source "$CURRENT_DIR/helpers.sh"
 cpu_tmp_dir=$(tmux show-option -gqv "@sysstat_cpu_tmp_dir")
 
 cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" 'CPU:#[fg=#{cpu.color}]#{cpu.pused}#[default]')
+cpu_pused_format=$(get_tmux_option "@sysstat_cpu_pused_format" '%.1f%%')
 
 cpu_medium_threshold=$(get_tmux_option "@sysstat_cpu_medium_threshold" "30")
 cpu_stress_threshold=$(get_tmux_option "@sysstat_cpu_stress_threshold" "80")
@@ -36,7 +37,7 @@ print_cpu_usage() {
   local cpu_color=$(get_cpu_color "$cpu_pused")
   
   local cpu_view="$cpu_view_tmpl"
-  cpu_view="${cpu_view//'#{cpu.pused}'/$(printf "%.1f%%" "$cpu_pused")}"
+  cpu_view="${cpu_view//'#{cpu.pused}'/$(printf "$cpu_pused_format" "$cpu_pused")}"
   cpu_view="${cpu_view//'#{cpu.color}'/$(echo "$cpu_color" | awk '{ print $1 }')}"
   cpu_view="${cpu_view//'#{cpu.color2}'/$(echo "$cpu_color" | awk '{ print $2 }')}"
   cpu_view="${cpu_view//'#{cpu.color3}'/$(echo "$cpu_color" | awk '{ print $3 }')}"

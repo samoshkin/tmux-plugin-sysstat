@@ -19,8 +19,8 @@ Features
 - OSX, Linux support
 - [ ] **TODO:** network I/O metric support
 
-Tested on: OS X El Capitan 10.11.5, Ubuntu 14 LTS, CentOS 7, FreeBSD 11.1.
-
+Tested on: OS X Big Sur 11.1, Ubuntu 14 LTS, CentOS 7, FreeBSD 11.1.
+Note: on OSX it is necessary to use GNU CLI tools  
 
 Installation
 ------------

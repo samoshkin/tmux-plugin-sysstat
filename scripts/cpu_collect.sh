@@ -8,8 +8,8 @@ set -e
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-refresh_interval=$(get_tmux_option "status-interval" "5")
-samples_count="60"
+refresh_interval=$(get_tmux_option "status-interval" "5")/2
+samples_count="2"
 cpu_metric_file="$(get_tmux_option "@sysstat_cpu_tmp_dir" "/dev/null")/cpu_collect.metric"
 
 get_cpu_usage() {

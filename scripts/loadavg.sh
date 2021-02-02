@@ -11,7 +11,7 @@ source "$CURRENT_DIR/helpers.sh"
 loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
 
 get_num_of_cores(){
-  is_osx && sysctl -n hw.ncpu || nproc
+  is_osx && sysctl -n hw.logicalcpu || nproc
 }
 
 main(){ 

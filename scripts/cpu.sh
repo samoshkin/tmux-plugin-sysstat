@@ -10,7 +10,7 @@ source "$CURRENT_DIR/helpers.sh"
 
 cpu_tmp_dir=$(tmux show-option -gqv "@sysstat_cpu_tmp_dir")
 
-cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" 'CPU:#[fg=#{cpu.color}]#{cpu.pused}#[default]')
+cpu_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" '#[bg=#3e4452]U:#[fg=#{cpu.color},bg=#3e4452]#{cpu.pused}#[fg=#aab2bf,bg=#3e4452] #[default]')
 
 cpu_medium_threshold=$(get_tmux_option "@sysstat_cpu_medium_threshold" "30")
 cpu_stress_threshold=$(get_tmux_option "@sysstat_cpu_stress_threshold" "80")

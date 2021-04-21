@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+onedark_black="#282c34"
+onedark_blue="#61afef"
+onedark_yellow="#e5c07b"
+onedark_red="#e06c75"
+onedark_white="#aab2bf"
+onedark_green="#98c379"
+onedark_visual_grey="#3e4452"
+onedark_comment_grey="#5c6370"
+
 set -u
 set -e
 
@@ -8,7 +17,7 @@ LC_NUMERIC=C
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$CURRENT_DIR/helpers.sh"
 
-mem_view_tmpl=$(get_tmux_option "@sysstat_mem_view_tmpl" 'MEM:#[fg=#{mem.color}]#{mem.pused}#[default]')
+mem_view_tmpl=$(get_tmux_option "@sysstat_mem_view_tmpl" '#[bg=#3e4452]M:#[fg=#{mem.color},bg=#3e4452]#{mem.pused}#[fg=#aab2bf,bg=#3e4452]  #[default]')
 
 mem_medium_threshold=$(get_tmux_option "@sysstat_mem_medium_threshold" "75")
 mem_stress_threshold=$(get_tmux_option "@sysstat_mem_stress_threshold" "90")

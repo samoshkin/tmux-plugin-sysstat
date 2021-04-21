@@ -74,7 +74,7 @@ fcomp() {
 # 1048576 - scale to GiB
 function get_size_scale_factor(){
   local size_unit="$1"
-  case "$size_unit" in 
+  case "$size_unit" in
     G) echo 1048576;;
     M) echo 1024;;
     K) echo 1;;
@@ -84,15 +84,15 @@ function get_size_scale_factor(){
 # Depending on scale factor, change precision
 # 12612325K - no digits after floating point
 # 1261M - no digits after floating point
-# 1.1G  - 1 digit after floating point 
+# 1.1G  - 1 digit after floating point
 function get_size_format(){
   local size_unit="$1"
-  case "$size_unit" in 
+  case "$size_unit" in
     G) echo '%.1f%s';;
     M) echo '%.0f%s';;
     K) echo '%.0f%s';;
   esac
 }
-  
-  
+
+
 

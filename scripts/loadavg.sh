@@ -3,6 +3,10 @@
 set -u
 set -e
 
+onedark_comment_grey="#5c6370"
+onedark_visual_grey="#3e4452"
+onedark_blue="#61afef"
+
 LC_NUMERIC=C
 
 CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -12,7 +16,7 @@ loadavg_per_cpu_core=$(get_tmux_option "@sysstat_loadavg_per_cpu_core" "true")
 loadavg_color_low=$(get_tmux_option "@sysstat_cpu_color_low" "green")
 loadavg_color_medium=$(get_tmux_option "@sysstat_cpu_color_medium" "yellow")
 loadavg_color_stress=$(get_tmux_option "@sysstat_cpu_color_stress" "red")
-loadavg_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" '#[fg=#{cpu.color}]#{cpu.pused}#[default]')
+loadavg_view_tmpl=$(get_tmux_option "@sysstat_cpu_view_tmpl" '#[fg=#{cpu.color},bg=#3e4452]#{cpu.pused}#[default]')
 
 loadavg_medium_threshold=$(get_tmux_option "@sysstat_cpu_medium_threshold" "0.8")
 loadavg_stress_threshold=$(get_tmux_option "@sysstat_cpu_stress_threshold" "1.0")
@@ -47,21 +51,21 @@ main(){
   load_5min=`echo $load_5min|awk -v num_cores="$num_cores" '{ printf "%.2f", $0/num_cores }'`
   load_1min=`echo $load_1min|awk -v num_cores="$num_cores" '{ printf "%.2f", $0/num_cores }'`
 
-  local loadavg_view="$loadavg_view_tmpl"
+  local loadavg_view="${loadavg_view_tmpl}"
 
   loadavg_color_15min=$(get_loadavg_color "$load_15min")
   loadavg_view_15min="${loadavg_view//'#{cpu.color}'/$(echo "$loadavg_color_15min" | awk '{ print $1 }')}"
-  loadavg_view_15min="${loadavg_view_15min//'#{cpu.pused}'/$(echo "$load_15min" | awk '{ print $1 }')}"
+  loadavg_view_15min="${loadavg_view_15min//'#{cpu.pused}'/$(echo "$load_15min" | awk '{ print $1" " }')}"
 
   loadavg_color_5min=$(get_loadavg_color "$load_5min")
   loadavg_view_5min="${loadavg_view//'#{cpu.color}'/$(echo "$loadavg_color_5min" | awk '{ print $1 }')}"
-  loadavg_view_5min="${loadavg_view_5min//'#{cpu.pused}'/$(echo "$load_5min" | awk '{ print $1 }')}"
+  loadavg_view_5min="${loadavg_view_5min//'#{cpu.pused}'/$(echo "$load_5min" | awk '{ print $1" " }')}"
 
   loadavg_color_1min=$(get_loadavg_color "$load_1min")
   loadavg_view_1min="${loadavg_view//'#{cpu.color}'/$(echo "$loadavg_color_1min" | awk '{ print $1 }')}"
-  loadavg_view_1min="${loadavg_view_1min//'#{cpu.pused}'/$(echo "$load_1min" | awk '{ print $1 }')}"
+  loadavg_view_1min="${loadavg_view_1min//'#{cpu.pused}'/$(echo "$load_1min" | awk '{ print $1"" }')}"
 
-  printf "$loadavg_view_15min $loadavg_view_5min $loadavg_view_1min"
+  printf "${loadavg_view_15min}${loadavg_view_5min}${loadavg_view_1min}#[bg=#3e4452]"
   # printf "$load_15min $load_5min $load_1min"
 
   # uptime | awk -v num_cores="$num_cores" '{
@@ -73,3 +77,4 @@ main(){
 }
 
 main
+

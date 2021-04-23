@@ -25,7 +25,7 @@ get_num_of_cores(){
   is_osx && sysctl -n hw.ncpu || nproc
 }
 
-get_loadavg_color(){
+get_loadavg_color_old(){
   local loadavg_used=$1
 
   if fcomp "$loadavg_stress_threshold" "$loadavg_used"; then
@@ -36,6 +36,18 @@ get_loadavg_color(){
     echo "$loadavg_color_low";
   fi
 }
+get_loadavg_color(){
+	local loadavg_used=$1
+
+	loadavg_used=$(echo ${loadavg_used}|awk '{print 10*$NF}')
+	loadavg_used=${loadavg_used%.*}
+	loadavg_used_num=$((loadavg_used / 1))
+	if [[ $loadavg_used_num -ge 10 ]]; then
+		loadavg_used_num=10
+	fi
+	echo "#${sysstat_color_map[$loadavg_used_num]}"
+}
+
 
 main(){
   local num_cores=$([ "$loadavg_per_cpu_core" == "true" ]  && get_num_of_cores || echo 1)

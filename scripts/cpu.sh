@@ -24,7 +24,7 @@ samples_count="1"
 cpu_usage_val=0
 cpu_idle_val=0
 
-get_cpu_color(){
+get_cpu_color_old(){
 	local cpu_used=$1
 
 	if fcomp "$cpu_stress_threshold" "$cpu_used"; then
@@ -35,6 +35,18 @@ get_cpu_color(){
 		echo "$cpu_color_low";
 	fi
 }
+
+get_cpu_color(){
+	local cpu_used=$1
+
+	cpu_used=${cpu_used%.*}
+	cpu_used_num=$((cpu_used / 10))
+	if [[ $cpu_used_num -ge 10 ]]; then
+		cpu_used_num=10
+	fi
+	echo "#${sysstat_color_map[$cpu_used_num]}"
+}
+
 
 get_cpu_usage() {
 	if is_osx; then
@@ -92,6 +104,8 @@ print_cpu_usage() {
 
 	get_cpu_usage
 	cpu_pused=$cpu_usage_val
+	cpu_color=$(get_cpu_color "$cpu_pused")
+
 	cpu_view="${cpu_view//'#{cpu.pused}'/$(printf "%.1f%%" "$cpu_pused")}"
 	cpu_view="${cpu_view//'#{cpu.color}'/$(echo "$cpu_color" | awk '{ print $1 }')}"
 	cpu_view="${cpu_view//'#{cpu.color2}'/$(echo "$cpu_color" | awk '{ print $2 }')}"
@@ -129,6 +143,7 @@ start_cpu_collect_if_required() {
 
 main(){
 	print_cpu_usage
+	# get_cpu_color 120.44
 }
 
 main

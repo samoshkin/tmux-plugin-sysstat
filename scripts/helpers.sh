@@ -1,4 +1,18 @@
 
+sysstat_color_map=(
+	5fff00
+	87ff00
+	afff00
+	d7ff00
+	ffff00
+	ffd700
+	ffaf00
+	ff8700
+	ff5f00
+	d70000
+	ff0000
+)
+
 get_tmux_option() {
   local option="$1"
   local default_value="$2"
